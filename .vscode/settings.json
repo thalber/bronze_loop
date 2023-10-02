@@ -1,0 +1,6 @@
+{
+    "rust-analyzer.linkedProjects": [
+        ".\\modules\\bl_primitives\\Cargo.toml",
+        ".\\Cargo.toml"
+    ]
+}
