@@ -1,8 +1,6 @@
 #[cfg(test)]
 mod tests;
 
-use std::fmt::Write;
-
 #[derive(Hash, PartialEq, Eq, Debug, Clone, Copy)]
 pub enum LocaleID {
     Ru,
@@ -23,7 +21,7 @@ impl std::fmt::Display for Error {
     }
 }
 
-// impl std::error::Error for Error {}
+impl std::error::Error for Error {}
 
 #[derive(Debug, PartialEq)]
 pub struct Locale {
