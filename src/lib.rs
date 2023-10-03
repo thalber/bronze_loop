@@ -90,10 +90,10 @@ impl Lookalikes {
 
 pub fn make_normalized_text(
     text: &str,
-    locales: &Vec<Locale>,
+    _locales: &Vec<Locale>,
     lookalike_sets: &Vec<Lookalikes>,
     target_locale: LocaleID,
-) -> String {
+) -> (bool, String) {
     let newchars = text.chars().into_iter().map(|c| {
         let mut selected_replacement = lookalike_sets
             .iter()
@@ -103,5 +103,7 @@ pub fn make_normalized_text(
             None => c,
         }
     });
-    newchars.collect()
+    let res: String = newchars.collect();
+    (res.as_str() != text, res)
 }
+

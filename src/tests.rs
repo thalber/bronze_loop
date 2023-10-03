@@ -24,6 +24,6 @@ fn normalize_text() {
     .unwrap();
     let locales = Locale::create_defaults();
     let lookalike_sets = vec![lookalikes];
-    let normalized = make_normalized_text(start_text, &locales, &lookalike_sets, LocaleID::En);
+    let (obfuscated, normalized) = make_normalized_text(start_text, &locales, &lookalike_sets, LocaleID::En);
     assert_eq!(normalized.as_str(), "iiiiiiiiii")
 }
