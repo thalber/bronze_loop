@@ -1,3 +1,10 @@
+use lazy_static::lazy_static;
+
+
+
+const RXS_SANITIZER: &str = "(\\s|\\.|,|!|\\?|\\r|\\n)+"; //todo: add more relevant symbols
+
+
 #[cfg(test)]
 mod tests;
 
@@ -117,4 +124,16 @@ pub fn make_normalized_text(
     //(res.as_str() != text, res)
 }
 
-
+pub fn sanitize_text(text: &str) -> String {
+    lazy_static!(
+        static ref RX_SANITIZER: regex::Regex = regex::Regex::new(RXS_SANITIZER).unwrap();
+    );
+    
+    let mut res = String::new();
+    for line in text.lines() {
+        res.push_str(RX_SANITIZER.replace_all(line, " ").as_ref());
+        res.push(' ');
+    }
+    res.pop();
+    res
+}
