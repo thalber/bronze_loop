@@ -35,6 +35,12 @@ pub struct Lookalikes {
     pub by_locale: cycle_map::CycleMap<LocaleID, char>,
 }
 
+#[derive(Debug)]
+pub struct TextNormalizationResult {
+    pub lookalikes_removed: bool,
+    pub value: String,
+}
+
 impl Locale {
     pub fn new(text: &str, id: LocaleID) -> Result<Self, Error> {
         let mut symbols: Vec<char> = text.chars().collect();
@@ -77,13 +83,13 @@ impl Lookalikes {
     ) -> Result<Lookalikes, Error> {
         let mut all_symbols: Vec<char> = all_symbols.chars().into_iter().collect();
         all_symbols.sort();
-        let as2 = all_symbols
+        let by_locale = all_symbols
             .iter()
             .filter_map(|c| symbol_sorter(c).map(|loc| (loc, *c)))
             .collect();
         Ok(Lookalikes {
             all_symbols,
-            by_locale: as2,
+            by_locale,
         })
     }
 }
@@ -93,7 +99,7 @@ pub fn make_normalized_text(
     _locales: &Vec<Locale>,
     lookalike_sets: &Vec<Lookalikes>,
     target_locale: LocaleID,
-) -> (bool, String) {
+) -> TextNormalizationResult {
     let newchars = text.chars().into_iter().map(|c| {
         let mut selected_replacement = lookalike_sets
             .iter()
@@ -104,6 +110,11 @@ pub fn make_normalized_text(
         }
     });
     let res: String = newchars.collect();
-    (res.as_str() != text, res)
+    TextNormalizationResult {
+        lookalikes_removed: res.as_str() != text,
+        value: res,
+    }
+    //(res.as_str() != text, res)
 }
+
 
